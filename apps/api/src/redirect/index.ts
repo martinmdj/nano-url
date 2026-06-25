@@ -1,0 +1,1 @@
+export { redirectRoutes } from './routes';

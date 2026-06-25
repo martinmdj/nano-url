@@ -1,0 +1,1 @@
+export { urlsRoutes } from './routes';

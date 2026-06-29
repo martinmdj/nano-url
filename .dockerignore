@@ -1,6 +1,11 @@
-node_modules/
+# Ignore node_modules at every level (root AND workspace packages). A bare
+# "node_modules/" only matches the context root, which lets stale per-package
+# node_modules (with host-specific pnpm symlinks) leak into the image and
+# shadow the clean `pnpm install` performed inside the build stage.
+**/node_modules/
+# Likewise ignore build output at every level
+**/dist/
 .git/
-dist/
 .env
 .env.local
 *.log

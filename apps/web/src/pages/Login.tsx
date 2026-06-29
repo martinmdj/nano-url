@@ -1,56 +1,6 @@
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 
-const styles: Record<string, React.CSSProperties> = {
-  container: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    minHeight: '100vh',
-    background: '#f5f5f5',
-  },
-  card: {
-    background: '#fff',
-    padding: 40,
-    borderRadius: 8,
-    boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-    width: 380,
-  },
-  title: { textAlign: 'center', marginBottom: 24, fontSize: 24, fontWeight: 700, color: '#1a73e8' },
-  field: { marginBottom: 16 },
-  label: { display: 'block', marginBottom: 4, fontSize: 14, fontWeight: 500 },
-  input: {
-    width: '100%',
-    padding: '8px 12px',
-    border: '1px solid #ddd',
-    borderRadius: 4,
-    fontSize: 15,
-    boxSizing: 'border-box' as const,
-  },
-  btn: {
-    width: '100%',
-    padding: 10,
-    background: '#1a73e8',
-    color: '#fff',
-    border: 'none',
-    borderRadius: 4,
-    fontSize: 16,
-    cursor: 'pointer',
-    marginTop: 8,
-  },
-  toggle: {
-    textAlign: 'center',
-    marginTop: 16,
-    color: '#1a73e8',
-    cursor: 'pointer',
-    fontSize: 14,
-    background: 'none',
-    border: 'none',
-    textDecoration: 'underline',
-  },
-  error: { color: '#d32f2f', fontSize: 13, marginTop: 4 },
-};
-
 export default function Login() {
   const { login, register } = useAuth();
   const [isRegister, setIsRegister] = useState(false);
@@ -86,26 +36,29 @@ export default function Login() {
   };
 
   return (
-    <div style={styles.container}>
-      <div style={styles.card}>
-        <h1 style={styles.title}>Nano-URL</h1>
-        <h2 style={{ textAlign: 'center', marginBottom: 20, fontSize: 18 }}>
-          {isRegister ? 'Register' : 'Login'}
-        </h2>
-        <form onSubmit={handleSubmit}>
-          <div style={styles.field}>
-            <label style={styles.label}>Username</label>
+    <div className="min-h-screen bg-surface-muted flex items-center justify-center p-4">
+      <div className="w-full max-w-sm card p-8">
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold text-primary-600">Nano-URL</h1>
+          <p className="text-sm text-slate-500 mt-1">
+            {isRegister ? 'Create your account' : 'Sign in to your account'}
+          </p>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-1">Username</label>
             <input
-              style={styles.input}
+              className="input"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               placeholder="Enter username"
             />
           </div>
-          <div style={styles.field}>
-            <label style={styles.label}>Password</label>
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-1">Password</label>
             <input
-              style={styles.input}
+              className="input"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -113,10 +66,10 @@ export default function Login() {
             />
           </div>
           {isRegister && (
-            <div style={styles.field}>
-              <label style={styles.label}>Confirm Password</label>
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1">Confirm Password</label>
               <input
-                style={styles.input}
+                className="input"
                 type="password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
@@ -124,12 +77,22 @@ export default function Login() {
               />
             </div>
           )}
-          {error && <div style={styles.error}>{error}</div>}
-          <button style={styles.btn} type="submit" disabled={submitting}>
+
+          {error && (
+            <div className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-md px-3 py-2">
+              {error}
+            </div>
+          )}
+
+          <button className="btn-primary w-full py-2.5 text-sm" type="submit" disabled={submitting}>
             {submitting ? 'Please wait...' : isRegister ? 'Register' : 'Login'}
           </button>
         </form>
-        <button style={styles.toggle} onClick={() => { setIsRegister(!isRegister); setError(''); }}>
+
+        <button
+          className="w-full text-center mt-5 text-sm text-primary-600 hover:text-primary-700 bg-transparent border-none cursor-pointer underline-offset-2 hover:underline"
+          onClick={() => { setIsRegister(!isRegister); setError(''); }}
+        >
           {isRegister ? 'Already have an account? Login' : "Don't have an account? Register"}
         </button>
       </div>

@@ -1,30 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
-const styles: Record<string, React.CSSProperties> = {
-  nav: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: '12px 24px',
-    background: '#1a73e8',
-    color: '#fff',
-  },
-  brand: { fontSize: 20, fontWeight: 700, color: '#fff', textDecoration: 'none' },
-  links: { display: 'flex', gap: 20, alignItems: 'center' },
-  link: { color: '#fff', textDecoration: 'none', fontSize: 15 },
-  logoutBtn: {
-    background: 'transparent',
-    border: '1px solid #fff',
-    color: '#fff',
-    padding: '6px 14px',
-    borderRadius: 4,
-    cursor: 'pointer',
-    fontSize: 14,
-  },
-  main: { maxWidth: 960, margin: '0 auto', padding: '24px 16px' },
-};
-
 export default function Layout({ children }: { children: React.ReactNode }) {
   const { logout, user } = useAuth();
   const navigate = useNavigate();
@@ -35,25 +11,32 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <div>
-      <nav style={styles.nav}>
-        <Link to="/dashboard" style={styles.brand}>
-          Nano-URL
-        </Link>
-        <div style={styles.links}>
-          <Link to="/dashboard" style={styles.link}>
-            Dashboard
+    <div className="min-h-screen bg-surface-muted">
+      <nav className="bg-white border-b border-surface-border">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
+          <Link to="/dashboard" className="text-lg font-bold text-primary-600 no-underline tracking-tight">
+            Nano-URL
           </Link>
-          <Link to="/stats" style={styles.link}>
-            Stats
-          </Link>
-          <span style={{ fontSize: 14, opacity: 0.8 }}>{user?.username}</span>
-          <button style={styles.logoutBtn} onClick={handleLogout}>
-            Logout
-          </button>
+          <div className="flex items-center gap-5">
+            <Link to="/dashboard" className="text-sm font-medium text-slate-600 hover:text-primary-600 no-underline transition-colors">
+              Dashboard
+            </Link>
+            <Link to="/stats" className="text-sm font-medium text-slate-600 hover:text-primary-600 no-underline transition-colors">
+              Stats
+            </Link>
+            <span className="text-xs text-slate-400">{user?.username}</span>
+            <button
+              className="btn-ghost text-xs px-3 py-1.5 border border-surface-border rounded-md"
+              onClick={handleLogout}
+            >
+              Logout
+            </button>
+          </div>
         </div>
       </nav>
-      <main style={styles.main}>{children}</main>
+      <main className="max-w-5xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+        {children}
+      </main>
     </div>
   );
 }

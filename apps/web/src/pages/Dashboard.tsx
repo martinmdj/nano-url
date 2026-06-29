@@ -3,77 +3,6 @@ import { Link } from 'react-router-dom';
 import client from '../api/client';
 import type { UrlResponse, UrlListResponse } from '@nano-url/shared';
 
-const styles: Record<string, React.CSSProperties> = {
-  title: { fontSize: 24, fontWeight: 700, marginBottom: 20 },
-  card: {
-    background: '#fff',
-    border: '1px solid #eee',
-    borderRadius: 8,
-    padding: 20,
-    marginBottom: 20,
-    boxShadow: '0 1px 4px rgba(0,0,0,0.06)',
-  },
-  form: { display: 'flex', gap: 12, flexWrap: 'wrap' as const, alignItems: 'flex-end' },
-  input: {
-    flex: 1,
-    minWidth: 200,
-    padding: '8px 12px',
-    border: '1px solid #ddd',
-    borderRadius: 4,
-    fontSize: 15,
-  },
-  inputSmall: {
-    width: 150,
-    padding: '8px 12px',
-    border: '1px solid #ddd',
-    borderRadius: 4,
-    fontSize: 15,
-  },
-  btn: {
-    padding: '8px 20px',
-    background: '#1a73e8',
-    color: '#fff',
-    border: 'none',
-    borderRadius: 4,
-    fontSize: 15,
-    cursor: 'pointer',
-  },
-  btnDanger: {
-    padding: '6px 12px',
-    background: '#d32f2f',
-    color: '#fff',
-    border: 'none',
-    borderRadius: 4,
-    fontSize: 13,
-    cursor: 'pointer',
-  },
-  btnSmall: {
-    padding: '6px 12px',
-    background: '#1a73e8',
-    color: '#fff',
-    border: 'none',
-    borderRadius: 4,
-    fontSize: 13,
-    cursor: 'pointer',
-    textDecoration: 'none',
-  },
-  table: { width: '100%', borderCollapse: 'collapse' as const },
-  th: { textAlign: 'left' as const, padding: '10px 8px', borderBottom: '2px solid #eee', fontSize: 14, fontWeight: 600 },
-  td: { padding: '10px 8px', borderBottom: '1px solid #eee', fontSize: 14, verticalAlign: 'middle' as const },
-  pagination: { display: 'flex', gap: 8, justifyContent: 'center', marginTop: 20 },
-  pageBtn: {
-    padding: '6px 14px',
-    border: '1px solid #ddd',
-    borderRadius: 4,
-    background: '#fff',
-    cursor: 'pointer',
-    fontSize: 14,
-  },
-  activePage: { background: '#1a73e8', color: '#fff', borderColor: '#1a73e8' },
-  badge: { padding: '2px 8px', borderRadius: 10, fontSize: 12, fontWeight: 600 },
-  error: { color: '#d32f2f', fontSize: 14, marginBottom: 12 },
-};
-
 export default function Dashboard() {
   const [urls, setUrls] = useState<UrlResponse[]>([]);
   const [page, setPage] = useState(1);
@@ -137,96 +66,94 @@ export default function Dashboard() {
 
   return (
     <div>
-      <h1 style={styles.title}>Dashboard</h1>
+      <h1 className="text-2xl font-bold text-slate-900 mb-6">Dashboard</h1>
 
-      <div style={styles.card}>
-        <h3 style={{ marginBottom: 12 }}>Create Short URL</h3>
-        <form style={styles.form} onSubmit={handleCreate}>
+      <div className="card p-5 mb-6">
+        <h3 className="text-sm font-semibold text-slate-700 mb-3">Create Short URL</h3>
+        <form className="flex flex-wrap items-end gap-3" onSubmit={handleCreate}>
           <input
-            style={styles.input}
+            className="input min-w-[200px] flex-1"
             placeholder="Long URL (https://...)"
             value={longUrl}
             onChange={(e) => setLongUrl(e.target.value)}
           />
           <input
-            style={styles.inputSmall}
+            className="input w-44"
             placeholder="Custom code (optional)"
             value={shortCode}
             onChange={(e) => setShortCode(e.target.value)}
           />
-          <button style={styles.btn} type="submit">Create</button>
+          <button className="btn-primary px-5 py-2 text-sm" type="submit">Create</button>
         </form>
       </div>
 
-      {error && <div style={styles.error}>{error}</div>}
-      {success && <div style={{ color: '#2e7d32', fontSize: 14, marginBottom: 12 }}>{success}</div>}
+      {error && <div className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-4 py-2.5 mb-4">{error}</div>}
+      {success && <div className="text-sm text-emerald-600 bg-emerald-50 border border-emerald-200 rounded-lg px-4 py-2.5 mb-4">{success}</div>}
 
-      <div style={styles.card}>
-        <h3 style={{ marginBottom: 12 }}>Your URLs ({total})</h3>
+      <div className="card p-5">
+        <h3 className="text-sm font-semibold text-slate-700 mb-4">Your URLs <span className="text-slate-400 font-normal">({total})</span></h3>
         {urls.length === 0 ? (
-          <p style={{ color: '#888' }}>No URLs yet. Create one above.</p>
+          <p className="text-sm text-slate-400">No URLs yet. Create one above.</p>
         ) : (
-          <table style={styles.table}>
-            <thead>
-              <tr>
-                <th style={styles.th}>Short Code</th>
-                <th style={styles.th}>Long URL</th>
-                <th style={styles.th}>Clicks</th>
-                <th style={styles.th}>Status</th>
-                <th style={styles.th}>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {urls.map((url) => (
-                <tr key={url.id}>
-                  <td style={styles.td}>
-                    <a
-                      href={`${shortUrlBase}/${url.shortCode}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{ color: '#1a73e8', textDecoration: 'none' }}
-                    >
-                      {url.shortCode}
-                    </a>
-                    <button
-                      onClick={() => copyToClipboard(`${shortUrlBase}/${url.shortCode}`)}
-                      style={{ marginLeft: 6, cursor: 'pointer', background: 'none', border: 'none', fontSize: 13, color: '#666' }}
-                      title="Copy short URL"
-                    >
-                      📋
-                    </button>
-                  </td>
-                  <td style={{ ...styles.td, maxWidth: 300, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                    {url.longUrl}
-                  </td>
-                  <td style={styles.td}>{url.clicks}</td>
-                  <td style={styles.td}>
-                    <span
-                      style={{
-                        ...styles.badge,
-                        background: url.isActive ? '#e8f5e9' : '#ffebee',
-                        color: url.isActive ? '#2e7d32' : '#d32f2f',
-                      }}
-                    >
-                      {url.isActive ? 'Active' : 'Inactive'}
-                    </span>
-                  </td>
-                  <td style={styles.td}>
-                    <div style={{ display: 'flex', gap: 6 }}>
-                      <Link to={`/urls/${url.id}`} style={styles.btnSmall}>View</Link>
-                      <button style={styles.btnDanger} onClick={() => handleDelete(url.id)}>Delete</button>
-                    </div>
-                  </td>
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead>
+                <tr>
+                  <th className="table-header">Short Code</th>
+                  <th className="table-header">Long URL</th>
+                  <th className="table-header">Clicks</th>
+                  <th className="table-header">Status</th>
+                  <th className="table-header">Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {urls.map((url) => (
+                  <tr key={url.id} className="hover:bg-surface-hover transition-colors">
+                    <td className="table-cell">
+                      <div className="flex items-center gap-1.5">
+                        <a
+                          href={`${shortUrlBase}/${url.shortCode}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-primary-600 hover:text-primary-700 no-underline font-medium text-sm"
+                        >
+                          {url.shortCode}
+                        </a>
+                        <button
+                          onClick={() => copyToClipboard(`${shortUrlBase}/${url.shortCode}`)}
+                          className="bg-transparent border-none cursor-pointer text-xs text-slate-400 hover:text-slate-600 p-0.5"
+                          title="Copy short URL"
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                        </button>
+                      </div>
+                    </td>
+                    <td className="table-cell max-w-[300px] truncate text-slate-500">
+                      {url.longUrl}
+                    </td>
+                    <td className="table-cell font-medium">{url.clicks}</td>
+                    <td className="table-cell">
+                      <span className={url.isActive ? 'badge-active' : 'badge-inactive'}>
+                        {url.isActive ? 'Active' : 'Inactive'}
+                      </span>
+                    </td>
+                    <td className="table-cell">
+                      <div className="flex items-center gap-2">
+                        <Link to={`/urls/${url.id}`} className="btn-primary text-xs px-3 py-1.5 no-underline">View</Link>
+                        <button className="btn-danger text-xs px-3 py-1.5" onClick={() => handleDelete(url.id)}>Delete</button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
 
         {totalPages > 1 && (
-          <div style={styles.pagination}>
+          <div className="flex items-center justify-center gap-2 mt-5">
             <button
-              style={styles.pageBtn}
+              className="btn-ghost text-xs px-3 py-1.5 border border-surface-border rounded-md disabled:opacity-40"
               disabled={page <= 1}
               onClick={() => setPage(page - 1)}
             >
@@ -235,14 +162,18 @@ export default function Dashboard() {
             {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
               <button
                 key={p}
-                style={{ ...styles.pageBtn, ...(p === page ? styles.activePage : {}) }}
+                className={`text-xs px-3 py-1.5 rounded-md border transition-colors ${
+                  p === page
+                    ? 'bg-primary-600 text-white border-primary-600'
+                    : 'btn-ghost border-surface-border'
+                }`}
                 onClick={() => setPage(p)}
               >
                 {p}
               </button>
             ))}
             <button
-              style={styles.pageBtn}
+              className="btn-ghost text-xs px-3 py-1.5 border border-surface-border rounded-md disabled:opacity-40"
               disabled={page >= totalPages}
               onClick={() => setPage(page + 1)}
             >

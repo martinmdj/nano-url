@@ -11,7 +11,7 @@ RUN npm install -g pnpm && pnpm install --frozen-lockfile
 FROM node:20-alpine AS web-builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
-COPY pnpm-workspace.yaml package.json ./
+COPY pnpm-workspace.yaml package.json tsconfig.base.json ./
 COPY packages/shared/ ./packages/shared/
 COPY apps/web/ ./apps/web/
 RUN npm install -g pnpm && pnpm --filter @nano-url/web build
@@ -19,7 +19,7 @@ RUN npm install -g pnpm && pnpm --filter @nano-url/web build
 FROM node:20-alpine AS api-builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
-COPY pnpm-workspace.yaml package.json ./
+COPY pnpm-workspace.yaml package.json tsconfig.base.json ./
 COPY packages/shared/ ./packages/shared/
 COPY apps/api/ ./apps/api/
 RUN npm install -g pnpm && pnpm --filter @nano-url/api build

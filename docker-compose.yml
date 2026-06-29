@@ -6,10 +6,12 @@ services:
     ports:
       - "3001:3001"
     environment:
+      - NODE_ENV=${NODE_ENV:-production}
+      - LOG_LEVEL=${LOG_LEVEL:-info}
       - DATABASE_URL=${DATABASE_URL:-postgres://postgres:postgres@postgres:5432/nano_url}
       - REDIS_URL=${REDIS_URL:-redis://redis:6379}
       - PORT=3001
-      - JWT_SECRET=${JWT_SECRET:-change-me}
+      - JWT_SECRET=${JWT_SECRET:?JWT_SECRET must be set to a random value of at least 32 characters}
       - BASIC_AUTH_USERNAME=${BASIC_AUTH_USERNAME:-admin}
       - BASIC_AUTH_PASSWORD=${BASIC_AUTH_PASSWORD:-change-me}
     depends_on:

@@ -1,15 +1,11 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import { env } from '../env';
 
 const SALT_ROUNDS = 10;
 
 function getSecret(): string {
-  const secret = process.env.JWT_SECRET;
-  if (!secret || secret === 'change-me-to-a-random-secret') {
-    console.warn('WARNING: JWT_SECRET is not set or is the default value. Using fallback for development.');
-    return 'dev-fallback-secret-do-not-use-in-production';
-  }
-  return secret;
+  return env.JWT_SECRET;
 }
 
 export async function hashPassword(password: string): Promise<string> {

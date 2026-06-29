@@ -1,5 +1,6 @@
 import type { ErrorHandler } from 'hono';
 import { AppError } from '../lib/errors';
+import { env } from '../env';
 
 export const errorHandler: ErrorHandler = (err, c) => {
   if (err instanceof AppError) {
@@ -13,7 +14,7 @@ export const errorHandler: ErrorHandler = (err, c) => {
 
   return c.json({
     success: false,
-    error: process.env.NODE_ENV === 'production'
+    error: env.NODE_ENV === 'production'
       ? 'Internal server error'
       : err.message,
   }, 500);

@@ -28,7 +28,7 @@ FROM node:20-alpine AS runner
 WORKDIR /app
 RUN addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 hono
-COPY --from=api-builder /app/dist ./dist
+COPY --from=api-builder /app/apps/api/dist ./dist
 COPY --from=api-builder /app/node_modules ./node_modules
 COPY --from=api-builder /app/package.json ./package.json
 COPY --from=web-builder /app/apps/web/dist ./web/dist
